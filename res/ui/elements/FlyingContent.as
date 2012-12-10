@@ -123,10 +123,17 @@ package res.ui.elements
 							{
 								cardSprite = card;
 							}
-							else if(cardSprite == null && specialCardIndex != j && card.cardNum == -1)
+						}
+						if(cardSprite == null)
+						{
+							for(j = 0; j < _cardNum; ++j)
 							{
-								cardSprite = card;
-								specialCardIndex = j;
+								card = cardList[j];
+								if(j != specialCardIndex && card.cardNum == -1)
+								{
+									specialCardIndex = j;
+									cardSprite = card;
+								}
 							}
 						}
 						_cardList[i - minNum] = cardSprite;
