@@ -53,8 +53,7 @@ package cache
 		
 		private function loadBmd(id : String, dictionaryString : String, suffix : String):void
 		{
-			var path : String = File.applicationDirectory.nativePath + "/res1/" + dictionaryString + 
-				"/" + id + "." + suffix;
+			var path : String = File.applicationDirectory.nativePath + "/res1/" + id + "." + suffix;
 
 			var file : File = new File(path);
 			if(file.exists)

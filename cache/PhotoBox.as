@@ -26,7 +26,8 @@ package cache
 		
 		public function setPhoto(id : String, dictionaryString : String = "photo", suffix : String = "jpg"):void
 		{
-			var bmd : BitmapData = Gamex.photoManager.getBitmapData(id);
+			var nameId : String = dictionaryString + "/" + id
+			var bmd : BitmapData = Gamex.photoManager.getBitmapData(nameId);
 			if(bmd != null)
 			{
 				bitmapData = bmd;
@@ -35,7 +36,7 @@ package cache
 			}
 			else
 			{
-				Gamex.photoManager.loadBitmapData(id,this,dictionaryString,suffix);
+				Gamex.photoManager.loadBitmapData(nameId,this,dictionaryString,suffix);
 			}
 		}
 		

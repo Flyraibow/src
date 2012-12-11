@@ -18,7 +18,7 @@ package res.ui.elements
 		public static const TYPE_KING_3 : int = 7;
 		public static const TYPE_TWO_PAIRS : int = 8;
 		
-		public static const SCORE_LIST : Vector.<int> = Vector.<int>([500,400,200,100,80,40,30,20,10]);
+		public static const SCORE_LIST : Vector.<int> = Vector.<int>([360,300,200,120,80,40,30,20,10]);
 		
 		public function SolutionData(t : int)
 		{

@@ -47,8 +47,10 @@ package res.ui
 		
 		private function onClickHelp(event : MouseEvent):void
 		{
-			var url : URLRequest = new URLRequest("http://www.baidu.com");
-			navigateToURL(url,"_blank");
+//			var url : URLRequest = new URLRequest("http://www.baidu.com");
+//			navigateToURL(url,"_blank");
+			Gamex.service.help.start();
+			Gamex.service.main.stop();
 		}
 		
 		

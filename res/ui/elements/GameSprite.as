@@ -710,6 +710,12 @@ package res.ui.elements
 				solution.cardList = cardList.concat();
 				return solution;
 			}
+			if(straight)
+			{
+				solution = new SolutionData(SolutionData.TYPE_STRAIGHT);
+				solution.cardList = cardList.concat();
+				return solution;
+			}
 			if(!king3)
 			{
 				cardNum = -1;
@@ -795,12 +801,6 @@ package res.ui.elements
 			{
 				solution = new SolutionData(SolutionData.TYPE_TWO_PAIRS);
 				solution.cardList = soluteList;
-				return solution;
-			}
-			if(straight)
-			{
-				solution = new SolutionData(SolutionData.TYPE_STRAIGHT);
-				solution.cardList = cardList.concat();
 				return solution;
 			}
 			return solution;

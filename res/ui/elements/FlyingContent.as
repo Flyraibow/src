@@ -26,6 +26,8 @@ package res.ui.elements
 		private var _scoreBitmapY : int;
 		private var _scoreBitmapTime : int;
 		private var _scoreBitmapTotalTime : int;
+		private var _scoreSprite : BonusSprite;
+		private var _scoreX : int;
 		
 		private var _callback : Function;
 		private var _state : int;			// 0: 移动，1 ： 消失
@@ -133,6 +135,7 @@ package res.ui.elements
 								{
 									specialCardIndex = j;
 									cardSprite = card;
+									break;
 								}
 							}
 						}
@@ -181,6 +184,7 @@ package res.ui.elements
 			_x = (_destPosX[0] + _destPosX[i - 1] + 100) / 2;
 			_totalTime = FLYING_TIME;
 			_currentTime = 0;
+			_scoreSprite = null;
 		}
 		
 		private function rankCardListByNo(cardSprite1 : CardSprite,cardSprite2 : CardSprite):int
@@ -243,6 +247,11 @@ package res.ui.elements
 								card.alpha = alpha;
 							}
 							_scoreBitmap.alpha = alpha;
+							_scoreSprite.alpha = 1;
+						}
+						else
+						{
+							_scoreSprite.alpha = _currentTime * 2 / _totalTime;
 						}
 					}
 				}
@@ -269,12 +278,21 @@ package res.ui.elements
 						_scoreBitmapTime = 0;
 						_scoreBitmapTotalTime = 200;
 						_effectLayer.addChild(_scoreBitmap);
+						
 					}
 					else if(_state == 1)
 					{
 						_state = 2;
 						_totalTime = STATE2_TIME;
 						_currentTime = 0;
+						
+						_scoreSprite = new BonusSprite();
+						_scoreSprite.initNum(_solutionData.score);
+						_effectLayer.addChild(_scoreSprite);
+						_scoreSprite.x = _x + _scoreSprite.getWidth() / 2;
+						_scoreSprite.y = 30;
+						_scoreSprite.alpha = 0;
+						
 						if(_callback != null)
 						{
 							var callback : Function = _callback;
@@ -284,6 +302,7 @@ package res.ui.elements
 					}
 					else if(_state == 2)
 					{
+						_effectLayer.removeChild(_scoreSprite);
 						if(_callback != null)
 						{
 							callback = _callback;
