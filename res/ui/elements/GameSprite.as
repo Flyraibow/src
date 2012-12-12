@@ -24,6 +24,7 @@ package res.ui.elements
 		private var _downSprite : Sprite;		// 下层的容器
 		private var _upSprite : Sprite;			// 上层卡牌的容器
 		private var _effectSprite : Sprite;		// 特效层
+		private var _bonusContainer : Sprite;	// 奖励倍数层
 		private var _moving : Boolean;			// 移动
 		private var _waitTime : int;			// 等待时间
 		
@@ -41,12 +42,21 @@ package res.ui.elements
 		private var _lastTime : int;
 		private var _checkCount : int;
 		
+		private var _bonusSprite : BonusSprite;
+		private var _bonusTime : int;
+//		private var _bonusCountDown : int;				// 倒计时
+//		private var _bonusNum : Number;
+		
 		private var _paused : Boolean;
 		private var _function : Object;
 		private var _count : Object;
 		
 		private const MOVES : int = 30;
 		private const PURCHASECOUNT : int = 1;
+		
+		private const BONUS_APPEAR_TIME : int = 200;
+		private const BONUS_DISAPPEAR_TIME : int = 1200;
+		private const BONUS_TOTAL_TIME : int = 1500;
 		
 		public static const EVENT_SCORE_CHANGE : int = 1;
 		public static const EVENT_MOVES_CHANGE : int = 2;
@@ -107,6 +117,15 @@ package res.ui.elements
 			_effectSprite.mouseEnabled = false;
 			_effectSprite.mouseChildren = false;
 			addChild(_effectSprite);
+			
+			_bonusContainer = new Sprite();
+			_bonusContainer.mouseChildren = false;
+			_bonusContainer.mouseEnabled = false;
+			addChild(_bonusContainer);
+//			_bonusSprite = new BonusSprite();
+//			_bonusSprite.initFloat(1.1);
+//			_bonusSprite.x = 400;
+//			_bonusContainer.addChild(_bonusSprite);
 			
 			_seriousBonus = 0;
 			_score = 0;
@@ -402,9 +421,7 @@ package res.ui.elements
 						}
 						flyingContent.setCallback(stepComplete1);
 						_flyingList.push(flyingContent);
-						_score += score;
 					}
-					applyCallback(EVENT_SCORE_CHANGE, _score);
 					_moving = true;
 				}
 				else
@@ -419,6 +436,24 @@ package res.ui.elements
 			flyContent.setCallback(stepComplete2);
 			if(_moving)
 			{
+				var bonus : Number = flyContent.getBonus();
+				if(bonus > 1)
+				{
+					if(_bonusSprite != null)
+					{
+						_bonusSprite.clear();
+					}
+					else
+					{
+						_bonusSprite = new BonusSprite();
+						_bonusContainer.addChild(_bonusSprite);
+					}
+					_bonusTime = 0;
+					_bonusSprite.initFloat(bonus);
+					_bonusSprite.alpha = 0;
+					_bonusSprite.x = 400;
+					_bonusSprite.y = 0;
+				}
 				_moving = false;
 				_waitTime = 700;
 				for(var i : int = 0; i < 5; ++i)
@@ -464,9 +499,11 @@ package res.ui.elements
 		
 		private function stepComplete2(flyContent : FlyingContent):void
 		{
+			_score += flyContent.getScore();
 			var index : int = _flyingList.indexOf(flyContent);
 			_flyingList.splice(index,1);
 			flyContent.destroy();
+			applyCallback(EVENT_SCORE_CHANGE, _score);
 		}
 		
 		/**
@@ -832,6 +869,33 @@ package res.ui.elements
 				{
 					_seriousBonus += 0.1;
 					check();
+				}
+			}
+			if(_bonusSprite != null)
+			{
+				_bonusTime += interval;
+				if(_bonusTime < BONUS_APPEAR_TIME)
+				{
+					var alpha : Number = _bonusTime / BONUS_APPEAR_TIME;
+					_bonusSprite.alpha = alpha;
+					_bonusSprite.y = 0 + 200 * alpha;
+				}
+				else if(_bonusTime < BONUS_DISAPPEAR_TIME)
+				{
+					_bonusSprite.alpha = 1;
+					_bonusSprite.y = 200;
+				}
+				else if(_bonusTime < BONUS_TOTAL_TIME)
+				{
+					alpha = (BONUS_TOTAL_TIME - _bonusTime) / (BONUS_TOTAL_TIME - BONUS_DISAPPEAR_TIME);
+					_bonusSprite.alpha = alpha;
+					_bonusSprite.y = 0 + 200 * alpha;
+				}
+				else
+				{
+					_bonusContainer.removeChild(_bonusSprite);
+					_bonusSprite = null;
+					_bonusTime = 0;
 				}
 			}
 		}

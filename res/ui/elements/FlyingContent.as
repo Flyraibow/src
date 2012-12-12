@@ -202,6 +202,16 @@ package res.ui.elements
 			return _cardList;
 		}
 		
+		public function getScore():int
+		{
+			return _solutionData.score * _bonus;
+		}
+		
+		public function getBonus():Number
+		{
+			return _bonus;
+		}
+		
 		public function destroy():void
 		{
 			for(var i : int = 0; i < _cardNum; ++i)
@@ -248,6 +258,10 @@ package res.ui.elements
 							}
 							_scoreBitmap.alpha = alpha;
 							_scoreSprite.alpha = 1;
+							_scoreSprite.x = _scoreX + (280 - _scoreX) * (1 - alpha);
+							_scoreSprite.y = 30 + (- 90 ) * (1 - alpha);
+							_scoreSprite.scaleX = 0.4 + 0.6 * alpha;
+							_scoreSprite.scaleY = 0.4 + 0.6 * alpha;
 						}
 						else
 						{
@@ -287,9 +301,11 @@ package res.ui.elements
 						_currentTime = 0;
 						
 						_scoreSprite = new BonusSprite();
-						_scoreSprite.initNum(_solutionData.score);
+						_scoreSprite.initNum(_solutionData.score * _bonus);
 						_effectLayer.addChild(_scoreSprite);
-						_scoreSprite.x = _x + _scoreSprite.getWidth() / 2;
+						
+						_scoreX = _x + _scoreSprite.getWidth() / 2;
+						_scoreSprite.x = _scoreX;
 						_scoreSprite.y = 30;
 						_scoreSprite.alpha = 0;
 						
